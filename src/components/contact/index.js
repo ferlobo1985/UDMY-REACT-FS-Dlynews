@@ -3,6 +3,9 @@ import * as Yup from 'yup';
 import { Alert } from 'react-bootstrap'
 import { useDispatch } from 'react-redux';
 
+import { sendMessage } from '../../store/utils/thunks'
+import { showToast } from '../utils/tools'
+
 const Contact = () => {
     const dispatch =  useDispatch();
     const formik = useFormik({
@@ -21,7 +24,17 @@ const Contact = () => {
         }),
         onSubmit:(values,{ resetForm })=>{
             /// dispatch
-            console.log(values)
+            dispatch(sendMessage(values))
+            .unwrap()
+            .then((response)=>{
+                if(response){
+                    resetForm();
+                    showToast('SUCCESS','Thank you, we will contact you back')
+                }
+            })
+            .catch(err=>{
+                showToast('ERROR','Sorry, try again later')  
+            });
         }
     })
 
