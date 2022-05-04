@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux'
 import { showToast } from './tools'
 
 import { addToNewsletter } from '../../store/utils/thunks'
+import { clearNewsletter } from '../../store/reducers/users';
 
 const Newsletter = () => {
     const textInput = useRef();
@@ -24,6 +25,7 @@ const Newsletter = () => {
                 showToast('ERROR','You are already on the the DB')
                 textInput.current.value = '';
             }
+            dispatch(clearNewsletter())
         })
     }
 
