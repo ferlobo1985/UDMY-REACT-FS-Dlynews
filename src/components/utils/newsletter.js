@@ -1,17 +1,30 @@
 import { useRef, useEffect} from 'react'
 import { Form, Button} from 'react-bootstrap'
+import { useDispatch } from 'react-redux'
+import { showToast } from './tools'
 
+import { addToNewsletter } from '../../store/utils/thunks'
 
 const Newsletter = () => {
     const textInput = useRef();
+    const dispatch = useDispatch();
 
     const handleSubmit = (e) => {
         e.preventDefault();
         const value = textInput.current.value;
 
-            
-
-
+        dispatch(addToNewsletter({email:value}))
+        .unwrap()
+        .then((response)=>{
+            if(response.newsletter === 'added'){
+                showToast('SUCCESS','Thank you for subcribing !!')
+                textInput.current.value = '';
+            }
+            if(response.newsletter === 'failed'){
+                showToast('ERROR','You are already on the the DB')
+                textInput.current.value = '';
+            }
+        })
     }
 
 
